@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Pernikahan</title>
+    <style>
+        /* Ini bagian CSS untuk mengatur desain dan warna */
+        body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; text-align: center; background-color: #fdfdfd; color: #333; }
+        
+        /* Desain Sampul (Cover) */
+        #cover { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #fce4ec; transition: top 1s ease-in-out; position: fixed; width: 100%; top: 0; z-index: 10; }
+        .hidden { top: -100vh !important; } /* Animasi sampul terangkat ke atas */
+        
+        /* Desain Tombol */
+        .btn { padding: 12px 24px; background-color: #d81b60; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-top: 20px; font-weight: bold; }
+        .btn:hover { background-color: #ad144d; }
+        
+        /* Desain Konten Utama */
+        #content { padding: 50px 20px; display: none; }
+        .section { margin-bottom: 60px; }
+        .timer { display: flex; justify-content: center; gap: 15px; font-size: 20px; font-weight: bold; color: #d81b60; margin-top:20px; }
+    </style>
+</head>
+<body>
+
+    <!-- BAGIAN SAMPUL (COVER) -->
+    <div id="cover">
+        <h2>The Wedding Of</h2>
+        <h1>Romeo & Juliet</h1>
+        <p>Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+        
+        <!-- Nama tamu akan otomatis berubah di sini -->
+        <h3 id="nama-tamu">Tamu Undangan</h3> 
+        
+        <button class="btn" onclick="bukaUndangan()">Buka Undangan</button>
+    </div>
+
+    <!-- BAGIAN KONTEN UTAMA (Muncul setelah tombol diklik) -->
+    <div id="content">
+        <div class="section">
+            <h2>Save The Date</h2>
+            <p>Kami mengundang Anda untuk hadir pada hari bahagia kami:</p>
+            <!-- Angka hitung mundur akan muncul di sini -->
+            <div class="timer" id="countdown"></div>
+        </div>
+
+        <div class="section">
+            <h2>Mempelai</h2>
+            <p><strong>Romeo</strong><br>Putra dari Bpk. X & Ibu Y</p>
+            <p>&</p>
+            <p><strong>Juliet</strong><br>Putri dari Bpk. A & Ibu B</p>
+        </div>
+
+        <div class="section">
+            <h2>Detail Acara</h2>
+            <p><strong>Akad Nikah</strong><br>Minggu, 12 Desember 2026<br>08.00 - 10.00 WIB</p>
+            <p><strong>Resepsi</strong><br>Minggu, 12 Desember 2026<br>11.00 - Selesai</p>
+            <!-- Ganti href dengan link Google Maps gedung acara Anda -->
+            <a href="https://maps.google.com" target="_blank"><button class="btn">Buka Google Maps</button></a>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT (Untuk fitur interaktif) -->
+    <script>
+        // 1. Mengambil nama tamu dari URL (contoh link: websiteanda.com/?to=Budi)
+        const urlParams = new URLSearchParams(window.location.search);
+        const namaTamu = urlParams.get('to');
+        if (namaTamu) {
+            document.getElementById('nama-tamu').innerText = namaTamu;
+        }
+
+        // 2. Fungsi membuka undangan (menghilangkan cover)
+        function bukaUndangan() {
+            document.getElementById('cover').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('content').style.display = 'block';
+            }, 800); // Menunggu animasi cover selesai
+        }
+
+        // 3. Fitur Hitung Mundur (Ganti tanggal di bawah dengan tanggal acara Anda)
+        const tanggalPernikahan = new Date("Dec 12, 2026 08:00:00").getTime();
+        setInterval(function() {
+            const sekarang = new Date().getTime();
+            const jarak = tanggalPernikahan - sekarang;
+
+            const hari = Math.floor(jarak / (1000 * 60 * 60 * 24));
+            const jam = Math.floor((jarak % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const menit = Math.floor((jarak % (1000 * 60 * 60)) / (1000 * 60));
+            const detik = Math.floor((jarak % (1000 * 60)) / 1000);
+
+            if(jarak > 0) {
+                document.getElementById("countdown").innerHTML = hari + " Hari " + jam + " Jam " + menit + " Menit " + detik + " Detik ";
+            } else {
+                document.getElementById("countdown").innerHTML = "Acara Sedang Berlangsung / Selesai";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
